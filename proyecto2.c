@@ -12,7 +12,7 @@ float pointDist(float xA, float yA, float xB, float yB){
 
 float cosLaw(float a, float b, float c){
     // Se calcula el angulo despejando ley de cosenos
-    float angle = acos((pow(c, 2) - pow(a, 2) - pow(b, 2))/(-2*a*b));
+    float angle = acos((pow(a, 2) - pow(b, 2) - pow(c, 2))/(-2*b*c));
     return (angle*180)/PI;
 }
 
@@ -33,14 +33,15 @@ int main(){
 
     float xCoords[n], yCoords[n], angles[n]; // Arrays necesarios
 
-    for (i = 0; i <= n; i++){
+    for (i = 0; i < n; i++){
         printf("Ingrese la %d° coordenada x: ", i+1);
         scanf("%f", &xCoords[i]);
         printf("Ingrese la %d° coordenada y: ", i+1);
         scanf("%f", &yCoords[i]);
         printf("Coordenadas => [%f, %f]\n\n", xCoords[i], yCoords[i]);
     }
-    totAngle = (n-2)*180;
+
+    totAngle = (n-2)*180; // Angulo interno total teorico
     printf("EL angulo interno total del poligono teorico: %d\n", totAngle);
     return 0;
 }
