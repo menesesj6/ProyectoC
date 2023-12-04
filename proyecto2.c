@@ -20,7 +20,7 @@ int main(){
     int n; // Cantidad de lados y angulos
     int totAngle; // Angulo total teorico
     int i; // Valor para iteraciones
-    float sum = 0; // SUma inicial de angulos obtenidos
+    float sum = 0; // Suma inicial de angulos obtenidos
     
     // Se pide al usuario la cantidad de lados del poligono
     printf("Ingrese la cantidad de lados de su poligono: \n"); 
@@ -34,6 +34,7 @@ int main(){
 
     float xCoords[n], yCoords[n], dists[n], auxdists[n], angles[n]; // Arrays necesarios
 
+    // Obtener e imprimir coordenadas
     for (i = 0; i < n; i++){
         printf("Ingrese la %d° coordenada x: ", i+1);
         scanf("%f", &xCoords[i]);
@@ -81,9 +82,16 @@ int main(){
     for (i = 0; i < n; i++){
         sum = sum + angles[i];
     }
-    printf("SUma de angulos experimentales: %f\n", sum);
 
+    printf("El angulo interno total del poligono teorico: %d\n", totAngle);
+    printf("Suma de angulos internos obtenida: %f\n", sum);
     totAngle = (n-2)*180; // Angulo interno total teorico
-    printf("EL angulo interno total del poligono teorico: %d\n", totAngle);
+
+    // Verificar suma de angulos internos
+    if (sum != totAngle){
+        printf("ERROR. Poligono no convexo.\n");
+        exit(1);
+    }
+
     return 0;
 }
