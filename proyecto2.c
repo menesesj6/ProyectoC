@@ -83,9 +83,9 @@ int main(){
         sum = sum + angles[i];
     }
 
+    totAngle = (n-2)*180; // Angulo interno total teorico
     printf("El angulo interno total del poligono teorico: %d\n", totAngle);
     printf("Suma de angulos internos obtenida: %f\n", sum);
-    totAngle = (n-2)*180; // Angulo interno total teorico
 
     // Verificar suma de angulos internos
     if (sum != totAngle){
