@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-double PI = 3.14159265358979323846;
+double PI = 3.14159265358979323846; // Necesario paralos angulos
 
 float pointDist(float xA, float yA, float xB, float yB){
     // Se calcula la distancia entre dos puntos
@@ -25,6 +25,7 @@ int main(){
     // Se pide al usuario la cantidad de lados del poligono
     printf("Ingrese la cantidad de lados de su poligono: \n"); 
     scanf("%d", &n);
+    printf("\n");
 
     // Caso de error, deben ser minimo 3 lados
     if (n < 3){
@@ -33,6 +34,8 @@ int main(){
     }
 
     float xCoords[n], yCoords[n], dists[n], auxdists[n], angles[n]; // Arrays necesarios
+
+    printf("Ingrese las coordenadas en orden que se conectan por lineas en el poligono.\n");
 
     // Obtener e imprimir coordenadas
     for (i = 0; i < n; i++){
@@ -50,7 +53,6 @@ int main(){
         } else{
             dists[i] = pointDist(xCoords[i], yCoords[i], xCoords[i+1], yCoords[i+1]);
         }
-        printf("Distancia: %f\n", dists[i]);
     }
 
     // Obtener las distancias auxiliares
@@ -64,7 +66,6 @@ int main(){
         else {
             auxdists[i] = pointDist(xCoords[i-1], yCoords[i-1], xCoords[i+1], yCoords[i+1]);
         }
-        printf("Distancia auxiliar: %f\n", auxdists[i]);
     }
 
     // Obtener los angulos con ley de cosenos
@@ -75,7 +76,6 @@ int main(){
         else{
             angles[i] = cosLaw(auxdists[i], dists[i], dists[i-1]);
         }
-        printf("Angulo de %d coordenada: %f\n", i+1,angles[i]);
     }
 
     // Obtener la suma de angulos internos obtenida
@@ -84,13 +84,17 @@ int main(){
     }
 
     totAngle = (n-2)*180; // Angulo interno total teorico
-    printf("El angulo interno total del poligono teorico: %d\n", totAngle);
-    printf("Suma de angulos internos obtenida: %f\n", sum);
+    printf("Suma de angulos internos obtenida: %.2f°\n\n", sum);
 
-    // Verificar suma de angulos internos
-    if (sum != totAngle){
-        printf("ERROR. Poligono no convexo.\n");
+    // Verificar suma de angulos internos, permituendo 5% de error
+    if (sum < 0.95*totAngle || 1.05*totAngle < sum){
+        printf("ERROR. Poligono no convexo porque su suma de angulos internos no es el teorico.\n");
         exit(1);
+    } else{
+        // Imprimir resultados
+        for (i = 0; i<n; i++){
+            printf("El angulo visto desde [%.2f, %.2f] => %.2f°\n", xCoords[i], yCoords[i], angles[i]);
+        }
     }
 
     return 0;
