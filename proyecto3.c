@@ -16,78 +16,109 @@ valores ingresados no son enteros.
 */
 
 /*
-Se nos pide trabajar con enteros, como el usuario debe ingresar
-una cantidad indefinida de ellos sabemos que vamos a tener un
-arreglo de enteros de 32bits o 4 bytes.
+Se decide cambiar la logica a una representaci[on de matriz mas detallada,
+porque una matriz aca en C debe verse como un puntero de punteros, la idea
+anterior tenia un fallo en la logica porque cuando uno accede al puntero
+de un array, este tiene un unico puntero que esta asociado al primer byte
+del arreglo. Entonces, se intentara construir la matriz tal que se repre-
+sente como un array de arrays para mayor robustez.
 
-Se podria decir que cada posicion del arreglo representa una
-posicion en la matriz. Dependiendo de lo que nos especifiquen
-entonces seccionamos las filas de la matriz cada tantas columnas.
+Entonces, vamos a tener un puntero, que apunta a la matriz y dentro de
+ella es donde vamos a proceder a obtener cada puntero correspondiente
+a las filas.
 
-Por tanto se asume la siguiente logica con base en la descripcion
-brindada en el enunciado. Se le va a solicitar al usuario un
-array de valores enteros, pero antes se le debera preguntar la
-cantidad de filas y columnas que va a tener la matriz. Entonces,
-si el usuario digita row=3, column=2 se deberia esperar un array
-tipo --> valores={1,2,3,4,5,6} donde las filas son:
--fila1: 1,2
--fila2: 3,4
--fila3: 5,6
-y por tanto solo se deberian obtener los punteros de 1, 3 y 5.
+Para se va a definir como: int **MATRIZ
+donde (*MATRIZ) se refiere a la matriz e (int *) se refiere a lo que con-
+tiene *MATRIZ, es decir, le indicamos que contiene punteros.
 */
 
 #include <stdio.h>
 #include <stdlib.h>
 
-void matrix(int row, int column, int valores[]) {
+void viewProws(int row, int column, int valores[]) {
     // No hay manera de guardar el tamanio de un array, la unica
     // forma es si los especificamos en otra variable
     int size = row * column;
     int fin = size - 1; // para sanity check
+}
+
+// Funcion para inicializar la matriz, y crear todas sus caracteristicas
+int **createMatrix(int N, int M) {
+    int **matriz;
+
+    // Vamos a reservar memoria de acuerdo a las filas y con
+    // tamanio de un puntero int. El (int **) al inicio, re-
+    // cordemos es para indicar que sera un puntero de punteros.
+    matriz = (int **)calloc(N, sizeof(int *));
 
 
-    // Sanity 
+    // El siguiente for es para almacenar memoria en las filas
+    for (int i=0; i<N; i++) {
+
+        // reserva memoria de acuerdo a las columnas M y con
+        // tamanio de entero, porque aqui si van los enteros
+        // recordemos que (int *) es para hacer el casting in-
+        // dicando esa posicion dentro de matriz es un puntero.
+        matriz[i] = (int *)calloc(M, sizeof(int));
+    }
+
+    return matriz;
 }
 
 
+// Funcion para ver la matriz
+void viewMatrix(int **matriz, int N, int M) {
+
+    // for que recorre las filas
+    for (int i=0; i<N; i++) {
+        
+        // for que recorre las columnas
+        for (int j=0; j<M; j++) {
+            printf("%d\t", matriz[i][j]);
+        }
+        printf("\n"); // para separar las filas
+    }
+}
+
+
+// MAIN
 int main() {
     // INICIALIZAR VARIABLES
-    int fila;
-    int columna;
-    int tamanio;
-    int value;
-    void* matrizPunt = NULL;
+    int filas, columnas, tamanio, value;
+    int **matrix;
     char entrada[20];
 
     // INTERACCION CON EL USUARIO
     printf("Escoja la cantidad de filas de la matriz: ");
-    scanf("%d", &fila);
+    scanf("%d", &filas);
     printf("Escoja la cantidad de columnas de la matriz: ");
-    scanf(" %d", &columna);
+    scanf(" %d", &columnas);
 
-    tamanio = fila * columna;
+    tamanio = filas * columnas;
 
     // CREAR LA MATRIZ
-    matrizPunt = calloc(tamanio, sizeof(int));
-    int * matriz = (int *) matrizPunt;
+    matrix = createMatrix(filas, columnas);
 
-    for (int i=0; i < tamanio; i++) {
-        printf("Ingrese el primer valor de la matriz: ");
-        scanf("%s", entrada);
-
-        value = atoi(entrada);
-
-        matriz[i] = value;
+    // GUARDAR VALORES EN LA MATRIZ
+    for (int i=0; i<filas; i++) {
+        for (int j=0; j<columnas; j++) {
+            printf("Ingrese el valor para la posicion [%d][%d]: ", i, j);
+            scanf("%d", &matrix[i][j]);
+        }
+        printf("\n");
     }
 
-    // Ver matriz
-    for (int j=0; j < tamanio; j++) {
-        printf("Posicion %d de matriz es 0x%x\n", j, matriz[j]);
-    }
+    // scanf("%s", entrada);
+    // value = atoi(entrada);
+
+    // VER MATRIZ
+    viewMatrix(matrix, filas, columnas);
 
 
     // LIBERAR MEMORIA
-    free(matriz);
+    // lo hacemos en el main ya que de otra forma no podriamos
+    // utilizarla aca.
+    free(matrix);
 
 
     return 0;
