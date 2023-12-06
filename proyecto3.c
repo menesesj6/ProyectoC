@@ -36,14 +36,6 @@ tiene *MATRIZ, es decir, le indicamos que contiene punteros.
 #include <stdlib.h>
 #include <string.h>
 
-void viewPointer2Rows(int **matriz, int row) {
-
-    for (int i=0; i<row; i++) {
-        printf("El puntero de la fila %d es: %p\n", i, &matriz[i]);
-        printf("Valor que apunta al puntero de la fila: %d", *matriz[i]);
-        printf("\n");
-    }
-}
 
 // Funcion para inicializar la matriz, y crear todas sus caracteristicas
 int **createMatrix(int N, int M) {
@@ -84,31 +76,33 @@ void viewMatrix(int **matriz, int N, int M) {
 }
 
 
-// MAIN
-int main() {
-    // INICIALIZAR VARIABLES
-    int filas, columnas, tamanio, values;
-    int i, j;
-    char* cursor;
-    int **matrix;
-    char entrada[50];
+// Funcion que permite crear una cantidad arbitraria de numeros enteros
+char *dynamicString() {
+    char *str, c;
+    int i = 0;
+    str = (char*)malloc(1*sizeof(char));
 
-    // INTERACCION CON EL USUARIO
-    printf("Escoja la cantidad de filas de la matriz: ");
-    scanf("%d", &filas);
-    printf("Escoja la cantidad de columnas de la matriz: ");
-    scanf(" %d", &columnas);
+    // PEDIRLE LOS VALORES AL USUARIO
+    printf("Ingrese los numeros que desea almacenar en la matriz: \n");
 
-    tamanio = filas * columnas;
+    while(c = getc(stdin), c != '\n') {
+        str[i] = c;
+        i++;
+        str = realloc(str, i*sizeof(char));
+    }
 
-    // CREAR LA MATRIZ
-    matrix = createMatrix(filas, columnas);
+    str[i] = '\0';
+    return(str);
+}
 
-    // GUARDAR VALORES EN LA MATRIZ
-    printf("Ingrese los numeros que desea almacenar en la matriz: ");
-    scanf("%s", entrada);
 
-    cursor = entrada;
+int funcionObjetivo(int **matriz, int rows, int columns, char *entrada) {
+    // Inicializamos las variables
+    char* cursor = entrada;
+    int i=0, j=0;
+
+
+    // Aca hacemos casting de str a int para almacenarlas en la matriz
 
     while (cursor != entrada + strlen(entrada)) {
         long int x = strtol(cursor, &cursor, 10);
@@ -117,9 +111,9 @@ int main() {
         }
 
         int intval = (int) x;
-        matrix[i][j] = intval;
+        matriz[i][j] = intval;
 
-        if (j == columnas-1) {
+        if (j == columns-1) {
             j = -1;
             i++;
         }
@@ -128,23 +122,53 @@ int main() {
     }
     printf("\n");
 
-    // VER LOS PUNTEROS DE LAS FILAS
-    viewPointer2Rows(matrix, filas);
 
-    // VER MATRIZ
-    printf("\nSu matriz creada es:\n");
-    viewMatrix(matrix, filas, columnas);
-
-
-    // LIBERAR MEMORIA
-    // lo hacemos en el main ya que de otra forma no podriamos utilizarla aca.
-    for (int k=0; k<filas; k++) {
-        free(matrix[k]);
+    // Aca obtenemos los punteros asociados a cada fila y comprobamos
+    // obteniendo el valor al cual apunta el puntero
+    for (int i=0; i<rows; i++) {
+        printf("El puntero de la fila %d es: %p\n", i, &matriz[i]);
+        printf("Valor que apunta al puntero de la fila: %d", *matriz[i]);
+        printf("\n");
     }
 
-    free(matrix);
-
+    // Aca desplegamos la matriz creado como segundo metodo de comprobacion
+    printf("\nSu matriz creada es:\n");
+    viewMatrix(matriz, rows, columns);
 
     return 0;
 }
 
+
+// MAIN
+int main() {
+    // INICIALIZAR VARIABLES
+    int filas, columnas;
+    int **matrix;
+    char * entrada = dynamicString();
+
+    // INTERACCION CON EL USUARIO
+    printf("\n>>> Determine la forma en la que quiere distribuir la matriz\n");
+    printf("Escoja la cantidad de filas de la matriz: ");
+    scanf("%d", &filas);
+    printf("Escoja la cantidad de columnas de la matriz: ");
+    scanf(" %d", &columnas);
+
+    // CREAR LA MATRIZ
+    matrix = createMatrix(filas, columnas);
+
+    // LLAMAR A LA FUNCION OBJETIVO
+    printf("\n");
+    funcionObjetivo(matrix, filas, columnas, entrada);
+
+    // LIBERAR MEMORIA DE LA MATRIZ CREADA
+    for (int k=0; k<filas; k++) {
+        free(matrix[k]);
+    }
+    free(matrix);
+    
+    // LIBERAR MEMORIA DE LOS VALORES INGRESADOS
+    free(entrada);
+
+
+    return 0;
+}
