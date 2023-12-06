@@ -34,12 +34,15 @@ tiene *MATRIZ, es decir, le indicamos que contiene punteros.
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-void viewProws(int row, int column, int valores[]) {
-    // No hay manera de guardar el tamanio de un array, la unica
-    // forma es si los especificamos en otra variable
-    int size = row * column;
-    int fin = size - 1; // para sanity check
+void viewPointer2Rows(int **matriz, int row) {
+
+    for (int i=0; i<row; i++) {
+        printf("El puntero de la fila %d es: %p\n", i, &matriz[i]);
+        printf("Valor que apunta al puntero de la fila: %d", *matriz[i]);
+        printf("\n");
+    }
 }
 
 // Funcion para inicializar la matriz, y crear todas sus caracteristicas
@@ -84,7 +87,7 @@ void viewMatrix(int **matriz, int N, int M) {
 // MAIN
 int main() {
     // INICIALIZAR VARIABLES
-    int filas, columnas, tamanio, value;
+    int filas, columnas, tamanio, values;
     int **matrix;
     char entrada[20];
 
@@ -100,6 +103,11 @@ int main() {
     matrix = createMatrix(filas, columnas);
 
     // GUARDAR VALORES EN LA MATRIZ
+    //printf("Ingrese los numeros que desea almacenar en la matriz: ");
+    //scanf("%s", entrada);
+    //printf("Asi se ve values %s\n", entrada);
+    //printf("Asi se ve len values %zu\n", strlen(entrada));
+
     for (int i=0; i<filas; i++) {
         for (int j=0; j<columnas; j++) {
             printf("Ingrese el valor para la posicion [%d][%d]: ", i, j);
@@ -108,16 +116,21 @@ int main() {
         printf("\n");
     }
 
-    // scanf("%s", entrada);
-    // value = atoi(entrada);
+    // VER LOS PUNTEROS DE LAS FILAS
+    viewPointer2Rows(matrix, filas);
 
     // VER MATRIZ
+    printf("\nSu matriz creada es:\n");
     viewMatrix(matrix, filas, columnas);
 
 
     // LIBERAR MEMORIA
     // lo hacemos en el main ya que de otra forma no podriamos
     // utilizarla aca.
+    for (int k=0; k<filas; k++) {
+        free(matrix[k]);
+    }
+
     free(matrix);
 
 
