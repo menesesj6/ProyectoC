@@ -1,3 +1,4 @@
+
 /*Programa calcula angulos internos de un poligono.
 
 El programa solicita coordenadas (x,y) al usuario de manera
