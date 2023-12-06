@@ -1,3 +1,14 @@
+/*Programa da el camino mas corto entre una ciudad origen y una ciudad destino. 
+
+El programa solicita, interactivamente, al usuario una matriz de distancias entre ciudades.
+ESte tambien debe ingresar la cantidad de ciudades, la distancia entre cada una y el origen
+y destino entre los que desea saber el camino mas corto. El programa itera todos los caminos
+posibles y compara las distancias de cada camino para asi determinar el camino de menor distancia.
+
+Hecho por:
+Jorge Meneses Garro - C14742
+Kristhel Quesada Lopez - C06153*/
+
 #include <stdio.h>
 #include <stdlib.h>
 
