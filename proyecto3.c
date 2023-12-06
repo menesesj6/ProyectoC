@@ -88,8 +88,10 @@ void viewMatrix(int **matriz, int N, int M) {
 int main() {
     // INICIALIZAR VARIABLES
     int filas, columnas, tamanio, values;
+    int i, j;
+    char* cursor;
     int **matrix;
-    char entrada[20];
+    char entrada[50];
 
     // INTERACCION CON EL USUARIO
     printf("Escoja la cantidad de filas de la matriz: ");
@@ -103,18 +105,28 @@ int main() {
     matrix = createMatrix(filas, columnas);
 
     // GUARDAR VALORES EN LA MATRIZ
-    //printf("Ingrese los numeros que desea almacenar en la matriz: ");
-    //scanf("%s", entrada);
-    //printf("Asi se ve values %s\n", entrada);
-    //printf("Asi se ve len values %zu\n", strlen(entrada));
+    printf("Ingrese los numeros que desea almacenar en la matriz: ");
+    scanf("%s", entrada);
 
-    for (int i=0; i<filas; i++) {
-        for (int j=0; j<columnas; j++) {
-            printf("Ingrese el valor para la posicion [%d][%d]: ", i, j);
-            scanf("%d", &matrix[i][j]);
+    cursor = entrada;
+
+    while (cursor != entrada + strlen(entrada)) {
+        long int x = strtol(cursor, &cursor, 10);
+        while (*cursor == ' ' || *cursor == ',') {
+            cursor++;
         }
-        printf("\n");
+
+        int intval = (int) x;
+        matrix[i][j] = intval;
+
+        if (j == columnas-1) {
+            j = -1;
+            i++;
+        }
+
+        j=j+1;
     }
+    printf("\n");
 
     // VER LOS PUNTEROS DE LAS FILAS
     viewPointer2Rows(matrix, filas);
@@ -125,8 +137,7 @@ int main() {
 
 
     // LIBERAR MEMORIA
-    // lo hacemos en el main ya que de otra forma no podriamos
-    // utilizarla aca.
+    // lo hacemos en el main ya que de otra forma no podriamos utilizarla aca.
     for (int k=0; k<filas; k++) {
         free(matrix[k]);
     }
