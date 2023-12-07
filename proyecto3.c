@@ -146,6 +146,9 @@ int funcionObjetivo(int **matriz, int rows, int columns, char *entrada) {
         }
 
         // Para deteccion de errores
+        // No solo detecta si el tamanio es incorrecto
+        // tambien si no es un entero porque el contador
+        // no se actualiza si cursor lee chars.
         contador++;
 
         if (tamanio < contador) {
