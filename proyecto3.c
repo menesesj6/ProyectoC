@@ -24,6 +24,9 @@ la matriz creada con los valores enteros y luego de tener la
 matriz creada completamente, extraemos los punteros que corres-
 ponden al valor de la primera fila. Luego, como segunda compro-
 bacion se despliega la matriz creada a como el usuario dispuso.
+
+IMPORTANTE: los valores para la matriz deben estar separados por
+coma o por espacio, o ambos.
 */
 
 #include <stdio.h>
